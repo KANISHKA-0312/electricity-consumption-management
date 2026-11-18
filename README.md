@@ -1,14 +1,30 @@
 # Electricity Consumption Management and Energy Usage Analysis System
+[![CI/CD](https://github.com/KANISHKA-0312/electricity-consumption-management/actions/workflows/ci.yml/badge.svg)](https://github.com/KANISHKA-0312/electricity-consumption-management/actions)
+[![Live Demo on GitHub Pages](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-blue?logo=github&style=flat-square)](https://kanishka-0312.github.io/electricity-consumption-management/)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/KANISHKA-0312/electricity-consumption-management)
+
 ### Department of Information Technology — Velalar College of Engineering and Technology, Erode - 12
-**Academic Year:** 2026-27 (ODD) | **Class:** 25IT3A  
+**Academic Year:** 2026-27 (ODD) | **Class:** 25IT3A&B  
 **Activity:** Project-Based Assessment  
-**Assigned Scenario:** **Scenario 14 (Register No.: 44)**  
-**Author:** Kanishka (Register No.: 44) | **GitHub:** [@KANISHKA-0312](https://github.com/KANISHKA-0312) | **Email:** kaniska029@gmail.com  
+**Assigned Scenario:** **Scenario 14 (Register No.: 14, 44, 74, 104)**  
 **Integrated Courses:**
 - **25ITT31:** Database Management Systems
 - **25ITT32:** Java Programming
 - **25ITT33:** Software Engineering
 - **25ITC31:** Foundations of Data Science
+
+---
+
+## 🌐 Live Interactive Web Dashboard
+You can test and run this system live right in your browser via GitHub Pages:  
+👉 **[https://kanishka-0312.github.io/electricity-consumption-management/](https://kanishka-0312.github.io/electricity-consumption-management/)**
+
+* **Interactive Features:**
+  - Real-time slab-based bill calculation with live preview
+  - Searchable directory of 20 consumer accounts
+  - High-consumption threshold profiler with instant filter slider
+  - Interactive Chart.js graphs for seasonal usage and revenue share
+  - Direct syllabus deliverables viewer
 
 ---
 
@@ -41,9 +57,13 @@ This project delivers an end-to-end automated **Electricity Consumption Manageme
 ```
 electricity-consumption-management/
 │
+├── .github/workflows/ci.yml           # Automated CI/CD build, test & artifact pipeline
+├── .devcontainer/devcontainer.json    # 1-Click GitHub Codespaces cloud configuration
+│
 ├── README.md                          # Master project documentation
 │
-├── docs/                              # Assessment Documentation Deliverables
+├── docs/                              # Assessment Documentation & GitHub Pages Web App
+│   ├── index.html                     # Live interactive web application dashboard
 │   ├── SRS.md                         # Software Requirements Specification (IEEE 830)
 │   ├── System_Design.md               # Use Case, Class, Architecture & Sequence Diagrams
 │   ├── Database_Design.md             # ER Diagram, Relational Model & Normalization (1NF to BCNF)
@@ -58,27 +78,17 @@ electricity-consumption-management/
 ├── java-app/                          # Java Application Deliverables (Course 25ITT32)
 │   ├── bin/                           # Compiled Java bytecode (.class files)
 │   ├── sample_output.txt              # Complete terminal execution transcript with sample I/O
-│   └── src/
-│       └── com/
-│           └── ecms/
-│               ├── Main.java          # Interactive menu-driven console application
-│               ├── model/
-│               │   ├── ConnectionType.java   # Category enum (Domestic, Commercial, etc.)
-│               │   ├── Consumer.java         # Consumer entity with OOP encapsulation
-│               │   ├── MeterReading.java     # Reading entity with consumption logic
-│               │   └── Bill.java             # Billing invoice entity
-│               ├── service/
-│               │   ├── TariffCalculator.java # Tariff slabs, fixed charges, taxes & subsidies
-│               │   ├── ConsumerService.java  # Consumer operations & validations
-│               │   └── BillingService.java   # Consumption verification & report generators
-│               └── dao/
-│                   └── DatabaseManager.java  # Data persistence & repository manager
+│   └── src/com/ecms/
+│       ├── Main.java                  # Interactive menu-driven console application
+│       ├── model/                     # POJO models (Consumer, MeterReading, Bill, ConnectionType)
+│       ├── service/                   # TariffCalculator, ConsumerService, BillingService
+│       └── dao/                       # DatabaseManager (in-memory + persistence)
 │
 └── python-analysis/                   # Data Science Deliverables (Course 25ITC31)
     ├── requirements.txt               # Dependencies (pandas, numpy, matplotlib, seaborn)
     ├── data_analysis.py               # Complete Python data processing & EDA script
     ├── analysis_notebook.ipynb        # Interactive Jupyter Notebook with analysis & plots
-    └── visualizations/                # Generated visualization artifacts
+    └── visualizations/                # Generated publication-ready visualization charts (PNG)
         ├── 01_monthly_consumption_trend.png
         ├── 02_consumption_by_connection_type.png
         ├── 03_top_high_consumers.png
@@ -89,81 +99,65 @@ electricity-consumption-management/
 
 ---
 
-## 🛠️ Technology Stack
+## 📊 Analytical Visualizations Gallery
 
-| Domain | Technology / Tool | Version / Standard |
-|---|---|---|
-| **Core Programming** | Java SE (JDK) | Java 17+ (Compiled & tested on Java 25) |
-| **Database Management** | SQL / SQLite / MySQL | ANSI SQL, Relational BCNF schema |
-| **Data Science & EDA** | Python | Python 3.9+ (`pandas`, `numpy`, `matplotlib`, `seaborn`) |
-| **Software Engineering** | UML / Markdown | IEEE 830 SRS, Mermaid Diagrams, BVA/EP Testing |
-| **Version Control** | Git & GitHub | Modular directory structure |
+The Python data analytics pipeline automatically generated these 6 visualization charts:
+
+| Visual 1: Monthly Usage Trend | Visual 2: Category Mean Consumption |
+|---|---|
+| ![Monthly Trend](python-analysis/visualizations/01_monthly_consumption_trend.png) | ![Category Consumption](python-analysis/visualizations/02_consumption_by_connection_type.png) |
+
+| Visual 3: Top 10 High Energy Consumers | Visual 4: Revenue Share by Sector |
+|---|---|
+| ![Top Consumers](python-analysis/visualizations/03_top_high_consumers.png) | ![Revenue Share](python-analysis/visualizations/04_revenue_distribution_by_type.png) |
+
+| Visual 5: Consumption Outliers (Box Plot) | Visual 6: Correlation Matrix |
+|---|---|
+| ![Outliers](python-analysis/visualizations/05_consumption_outlier_boxplot.png) | ![Correlation Heatmap](python-analysis/visualizations/06_correlation_heatmap.png) |
 
 ---
 
 ## ⚙️ Execution and Setup Instructions
 
-### 1. Java Application Setup & Run
-The Java application is self-contained and requires no external third-party libraries:
+### 1. Online Execution via GitHub Codespaces
+Click the badge below to start a full cloud development environment in seconds with all runtimes pre-configured:  
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/KANISHKA-0312/electricity-consumption-management)
 
+### 2. Local Java Application Execution
 ```bash
-# Navigate to the java-app directory
+# Navigate to java-app directory
 cd java-app
 
-# Compile all source files into bin directory
-javac -d bin src/com/ecms/*.java src/com/ecms/model/*.java src/com/ecms/service/*.java src/com/ecms/dao/*.java
+# Compile (if needed)
+javac -d bin $(find src -name "*.java")
 
-# Run the interactive console application
+# Run the console application
 java -cp bin com.ecms.Main
 ```
 
-### 2. Database (SQL) Setup
-You can run the SQL scripts in any standard relational DBMS (MySQL Workbench, phpMyAdmin, PostgreSQL, or SQLite):
+### 3. Database (SQL) Setup
 ```bash
-# For SQLite:
+# Using SQLite
 sqlite3 electricity_billing.db < database/schema.sql
 sqlite3 electricity_billing.db < database/seed_data.sql
 
-# Execute analytical queries:
+# Test analytical query
 sqlite3 electricity_billing.db < database/queries.sql
 ```
 
-### 3. Python Data Analytics & Visualization Setup
+### 4. Python Data Science Analytics
 ```bash
-# Navigate to python-analysis directory
 cd python-analysis
-
-# Install dependencies
 pip install -r requirements.txt
-
-# Run the complete automated EDA and chart generation script
 python data_analysis.py
-
-# Or launch the interactive Jupyter Notebook
-jupyter notebook analysis_notebook.ipynb
 ```
 
 ---
 
-## 📊 Analytical Visualizations Overview
-
-The Python analytics pipeline generates 6 analytical visualizations saved under `python-analysis/visualizations/`:
-1. **`01_monthly_consumption_trend.png`:** Time-series line chart tracking monthly consumption trends (May to October 2026) showcasing peak summer cooling loads and industrial baseloads.
-2. **`02_consumption_by_connection_type.png`:** Comparative bar chart highlighting mean energy demand across Domestic, Commercial, Industrial, and Agricultural sectors.
-3. **`03_top_high_consumers.png`:** Horizontal bar chart profiling the top 10 highest electricity-consuming industrial and commercial establishments.
-4. **`04_revenue_distribution_by_type.png`:** Donut pie chart displaying billed revenue contributions per sector.
-5. **`05_consumption_outlier_boxplot.png`:** Statistical box plot and jitter stripplot identifying consumption distribution spreads and outlier accounts.
-6. **`06_correlation_heatmap.png`:** Pearson correlation matrix revealing strong relationships between sanctioned load rating, kWh consumed, and billed revenue.
-
----
-
-## 👥 Student & Author Details
-- **Author / Developer:** Kanishka
-- **GitHub Username:** [KANISHKA-0312](https://github.com/KANISHKA-0312)
-- **Email:** kaniska029@gmail.com
-- **Register Number:** 44
-- **Class:** 25IT3A
-- **Academic Year:** 2026-27 (ODD Semester)
-- **Scenario Number:** Scenario 14
+## 👥 Student Assessment Details
 - **Institution:** Velalar College of Engineering and Technology (Autonomous), Thindal, Erode - 638012
 - **Department:** Department of Information Technology
+- **Academic Year:** 2026-27 (ODD Semester)
+- **Class:** 25IT3A&B
+- **Scenario Number:** Scenario 14
+- **Student Register Numbers:** 14, 44, 74, 104

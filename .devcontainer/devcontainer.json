@@ -1,0 +1,23 @@
+{
+  "name": "Electricity Consumption Management System",
+  "image": "mcr.microsoft.com/devcontainers/universal:2-linux",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "21"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11"
+    }
+  },
+  "postCreateCommand": "pip install -r python-analysis/requirements.txt && javac -d java-app/bin $(find java-app/src -name '*.java')",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "ms-python.python",
+        "ms-toolsai.jupyter",
+        "qwtel.sqlite-viewer"
+      ]
+    }
+  }
+}

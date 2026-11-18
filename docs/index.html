@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electricity Consumption Management & Energy Usage Analysis System | VCET IT</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Top College Header -->
+    <header class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-3">
+                        <span class="bg-amber-400 text-blue-950 font-black px-2.5 py-1 rounded text-xs tracking-wider uppercase">Scenario 14</span>
+                        <span class="text-blue-200 text-sm font-medium">Class: 25IT3A&B | Reg No: 14, 44, 74, 104</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold mt-1 tracking-tight text-white">
+                        Electricity Consumption Management & Energy Usage Analysis
+                    </h1>
+                    <p class="text-blue-200 text-xs sm:text-sm mt-0.5">
+                        Velalar College of Engineering and Technology, Erode - 12 | Department of Information Technology
+                    </p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <a href="https://github.com/KANISHKA-0312/electricity-consumption-management" target="_blank" 
+                       class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg font-semibold text-sm transition border border-white/20">
+                        <i class="fab fa-github text-lg"></i> GitHub Repository
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex space-x-2 sm:space-x-8 overflow-x-auto py-2">
+                <button onclick="switchTab('calculator')" id="tab-calculator" class="tab-btn px-3 py-2 text-sm font-semibold border-b-2 border-blue-600 text-blue-600 flex items-center gap-2 whitespace-nowrap">
+                    <i class="fas fa-calculator"></i> Live Bill Calculator
+                </button>
+                <button onclick="switchTab('consumers')" id="tab-consumers" class="tab-btn px-3 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 whitespace-nowrap">
+                    <i class="fas fa-users"></i> Consumer Directory
+                </button>
+                <button onclick="switchTab('high-usage')" id="tab-high-usage" class="tab-btn px-3 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 whitespace-nowrap">
+                    <i class="fas fa-bolt text-amber-500"></i> High-Consumption Profiler
+                </button>
+                <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-btn px-3 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 whitespace-nowrap">
+                    <i class="fas fa-chart-line text-emerald-600"></i> Visual Energy Analytics
+                </button>
+                <button onclick="switchTab('docs')" id="tab-docs" class="tab-btn px-3 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 whitespace-nowrap">
+                    <i class="fas fa-book"></i> Syllabus Deliverables
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- TAB 1: LIVE BILL CALCULATOR -->
+        <section id="view-calculator" class="tab-content block">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Input Panel -->
+                <div class="lg:col-span-5 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-5">
+                        <div>
+                            <h2 class="text-lg font-bold text-slate-900">Record Reading & Generate Bill</h2>
+                            <p class="text-xs text-slate-500">Calculate electricity invoice with statutory slabs</p>
+                        </div>
+                        <span class="p-2 bg-blue-50 text-blue-600 rounded-lg"><i class="fas fa-file-invoice-dollar"></i></span>
+                    </div>
+
+                    <form id="billingForm" onsubmit="calculateLiveBill(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Select Registered Consumer</label>
+                            <select id="calcConsumerSelect" onchange="autofillConsumer()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                <option value="">-- Choose Account or Custom Input --</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Connection Type</label>
+                                <select id="calcCategory" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                    <option value="Domestic">Domestic (Home)</option>
+                                    <option value="Commercial">Commercial (Business)</option>
+                                    <option value="Industrial">Industrial (Factory)</option>
+                                    <option value="Agricultural">Agricultural (Pump)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Sanctioned Load</label>
+                                <input type="number" id="calcLoad" value="3.0" step="0.5" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="in kW">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Previous Reading</label>
+                                <input type="number" id="calcPrevReading" value="1250" step="0.1" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Current Reading</label>
+                                <input type="number" id="calcCurrReading" value="1530" step="0.1" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-blue-50/70 border border-blue-100 rounded-lg text-xs text-blue-900 flex items-center justify-between">
+                            <span>Formula: <strong>Units = Current - Previous</strong></span>
+                            <span id="calcPreviewUnits" class="font-bold text-sm text-blue-700">280.0 kWh</span>
+                        </div>
+
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-lg transition duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+                            <i class="fas fa-calculator"></i> Compute Invoice Breakdown
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Invoice Display Panel -->
+                <div class="lg:col-span-7 bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="border-b-2 border-dashed border-slate-200 pb-5 mb-5 flex justify-between items-start">
+                        <div>
+                            <span class="text-xs font-bold text-blue-600 tracking-wider uppercase">Official Electricity Invoice</span>
+                            <h3 id="invId" class="text-xl font-extrabold text-slate-900 mt-0.5">BILL-202611-1001</h3>
+                            <p id="invConsumerMeta" class="text-xs text-slate-500 mt-1">Consumer: Ramesh Kumar S | Meter: MTR-ERD-1001</p>
+                        </div>
+                        <div class="text-right">
+                            <span id="invStatusBadge" class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">PAID</span>
+                            <p class="text-xs text-slate-400 mt-1.5" id="invBillingPeriod">Period: 10/2026</p>
+                        </div>
+                    </div>
+
+                    <!-- Consumption Metrics -->
+                    <div class="grid grid-cols-3 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-100 text-center mb-6">
+                        <div>
+                            <p class="text-xs text-slate-500">Previous Meter</p>
+                            <p id="invPrevVal" class="text-sm sm:text-base font-bold text-slate-700">1,250.0</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-500">Current Meter</p>
+                            <p id="invCurrVal" class="text-sm sm:text-base font-bold text-slate-700">1,530.0</p>
+                        </div>
+                        <div class="border-l border-slate-200">
+                            <p class="text-xs text-blue-600 font-semibold">Net Consumed</p>
+                            <p id="invUnitsVal" class="text-sm sm:text-lg font-extrabold text-blue-600">280.0 kWh</p>
+                        </div>
+                    </div>
+
+                    <!-- Breakdown Table -->
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between py-1.5 border-b border-slate-100">
+                            <span class="text-slate-600">Energy Charges (Slab Telescopic Rate)</span>
+                            <span id="invEnergyCharges" class="font-semibold text-slate-800">₹ 585.00</span>
+                        </div>
+                        <div class="flex justify-between py-1.5 border-b border-slate-100">
+                            <span class="text-slate-600">Fixed / Standing Category Charges</span>
+                            <span id="invFixedCharges" class="font-semibold text-slate-800">₹ 30.00</span>
+                        </div>
+                        <div class="flex justify-between py-1.5 border-b border-slate-100">
+                            <span class="text-slate-600">Electricity Duty (State Tax @ 5%)</span>
+                            <span id="invDuty" class="font-semibold text-slate-800">₹ 30.75</span>
+                        </div>
+                        <div id="invSubsidyRow" class="flex justify-between py-1.5 border-b border-slate-100 text-emerald-600 hidden">
+                            <span>Government Agricultural Power Subsidy</span>
+                            <span id="invSubsidy" class="font-semibold">-₹ 0.00</span>
+                        </div>
+                        <div class="flex justify-between py-3 border-t-2 border-slate-800 text-base sm:text-lg font-extrabold text-slate-900">
+                            <span>TOTAL NET AMOUNT PAYABLE</span>
+                            <span id="invTotalAmount" class="text-blue-700">₹ 645.75</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+                        <span>Due Date: <strong>2026-12-08</strong> (Within 20 days)</span>
+                        <button onclick="window.print()" class="text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1.5">
+                            <i class="fas fa-print"></i> Print Invoice
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: CONSUMER DIRECTORY -->
+        <section id="view-consumers" class="tab-content hidden">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-6 border-b border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900">Registered Consumer Accounts</h2>
+                        <p class="text-xs text-slate-500">Live directory of 20 accounts across Domestic, Commercial, Industrial, and Agricultural sectors</p>
+                    </div>
+                    <div class="flex items-center gap-3 w-full sm:w-auto">
+                        <input type="text" id="consumerSearchInput" onkeyup="filterConsumerTable()" placeholder="Search by name, ID or city..." class="w-full sm:w-64 px-3 py-1.5 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <select id="categoryFilterSelect" onchange="filterConsumerTable()" class="px-3 py-1.5 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="ALL">All Categories</option>
+                            <option value="Domestic">Domestic</option>
+                            <option value="Commercial">Commercial</option>
+                            <option value="Industrial">Industrial</option>
+                            <option value="Agricultural">Agricultural</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-50 text-slate-600 font-bold uppercase tracking-wider border-b border-slate-200">
+                            <tr>
+                                <th class="p-3.5">Consumer ID</th>
+                                <th class="p-3.5">Account Holder</th>
+                                <th class="p-3.5">Sector</th>
+                                <th class="p-3.5">Meter No</th>
+                                <th class="p-3.5">Load (kW)</th>
+                                <th class="p-3.5">City</th>
+                                <th class="p-3.5">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="consumerTableBody" class="divide-y divide-slate-100 font-medium text-slate-700">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: HIGH CONSUMPTION PROFILER -->
+        <section id="view-high-usage" class="tab-content hidden">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-6">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900">High-Consumption Anomaly Profiler</h2>
+                        <p class="text-xs text-slate-500">Identifies heavy power consumers and potential tariff evasion</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <label class="text-xs font-semibold text-slate-600">Threshold (kWh):</label>
+                        <input type="range" id="thresholdSlider" min="200" max="5000" step="50" value="400" oninput="updateThreshold(this.value)" class="w-32 sm:w-48">
+                        <span id="thresholdDisplay" class="bg-amber-100 text-amber-800 font-bold px-2.5 py-1 rounded text-xs">&ge; 400 kWh</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-50 text-slate-600 font-bold uppercase tracking-wider border-b border-slate-200">
+                            <tr>
+                                <th class="p-3.5">Rank</th>
+                                <th class="p-3.5">Consumer ID</th>
+                                <th class="p-3.5">Consumer Name</th>
+                                <th class="p-3.5">Category</th>
+                                <th class="p-3.5">Consumption (kWh)</th>
+                                <th class="p-3.5">Bill Amount</th>
+                                <th class="p-3.5">Payment State</th>
+                            </tr>
+                        </thead>
+                        <tbody id="highUsageTableBody" class="divide-y divide-slate-100 font-medium text-slate-700">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: VISUAL ENERGY ANALYTICS -->
+        <section id="view-analytics" class="tab-content hidden">
+            <!-- Summary Stats -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <p class="text-xs text-slate-500 font-medium">Total Billed Consumption</p>
+                    <p class="text-xl sm:text-2xl font-black text-slate-900 mt-1">426,840 <span class="text-xs font-medium text-slate-500">kWh</span></p>
+                    <p class="text-xs text-emerald-600 mt-1 font-semibold"><i class="fas fa-arrow-up"></i> +4.2% Seasonal Peak</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <p class="text-xs text-slate-500 font-medium">Total Revenue Billed</p>
+                    <p class="text-xl sm:text-2xl font-black text-blue-700 mt-1">₹ 34,93,638</p>
+                    <p class="text-xs text-slate-400 mt-1">Across 6 billing cycles</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <p class="text-xs text-slate-500 font-medium">Collection Efficiency</p>
+                    <p class="text-xl sm:text-2xl font-black text-emerald-600 mt-1">87.5%</p>
+                    <p class="text-xs text-slate-400 mt-1">Paid on-time</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <p class="text-xs text-slate-500 font-medium">High Outlier Accounts</p>
+                    <p class="text-xl sm:text-2xl font-black text-amber-600 mt-1">11 Accounts</p>
+                    <p class="text-xs text-slate-400 mt-1">&ge; 400 kWh / cycle</p>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <h3 class="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <i class="fas fa-chart-line text-blue-600"></i> Monthly Consumption Trend (May - Oct 2026)
+                    </h3>
+                    <div class="h-64 sm:h-72">
+                        <canvas id="chartMonthlyTrend"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <h3 class="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <i class="fas fa-chart-pie text-indigo-600"></i> Revenue Share by Sector (%)
+                    </h3>
+                    <div class="h-64 sm:h-72 flex items-center justify-center">
+                        <canvas id="chartRevenuePie"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <h3 class="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fas fa-chart-bar text-amber-600"></i> Average Energy Units Consumed by Sector (kWh)
+                </h3>
+                <div class="h-64 sm:h-80">
+                    <canvas id="chartCategoryAvg"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: SYLLABUS DELIVERABLES -->
+        <section id="view-docs" class="tab-content hidden">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <h2 class="text-xl font-bold text-slate-900">Project-Based Assessment Deliverables</h2>
+                    <p class="text-xs text-slate-500">Velalar College of Engineering and Technology (Autonomous) | Class 25IT3A&B</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <a href="https://github.com/KANISHKA-0312/electricity-consumption-management/blob/main/docs/SRS.md" target="_blank" class="p-4 rounded-xl border border-slate-200 hover:border-blue-500 hover:shadow-md transition flex items-start gap-4">
+                        <span class="p-3 bg-blue-100 text-blue-700 rounded-lg text-lg"><i class="fas fa-file-alt"></i></span>
+                        <div>
+                            <h4 class="font-bold text-sm text-slate-900">Software Requirements Specification (SRS)</h4>
+                            <p class="text-xs text-slate-500 mt-1">IEEE 830 standard documentation with functional & non-functional requirements.</p>
+                        </div>
+                    </a>
+
+                    <a href="https://github.com/KANISHKA-0312/electricity-consumption-management/blob/main/docs/System_Design.md" target="_blank" class="p-4 rounded-xl border border-slate-200 hover:border-blue-500 hover:shadow-md transition flex items-start gap-4">
+                        <span class="p-3 bg-indigo-100 text-indigo-700 rounded-lg text-lg"><i class="fas fa-project-diagram"></i></span>
+                        <div>
+                            <h4 class="font-bold text-sm text-slate-900">System Design & UML Diagrams</h4>
+                            <p class="text-xs text-slate-500 mt-1">Use Case Diagram, Class Diagram, Sequence Diagram, and 3-Tier Architecture.</p>
+                        </div>
+                    </a>
+
+                    <a href="https://github.com/KANISHKA-0312/electricity-consumption-management/blob/main/docs/Database_Design.md" target="_blank" class="p-4 rounded-xl border border-slate-200 hover:border-blue-500 hover:shadow-md transition flex items-start gap-4">
+                        <span class="p-3 bg-emerald-100 text-emerald-700 rounded-lg text-lg"><i class="fas fa-database"></i></span>
+                        <div>
+                            <h4 class="font-bold text-sm text-slate-900">ER Diagram & Normalization (1NF to BCNF)</h4>
+                            <p class="text-xs text-slate-500 mt-1">Relational schema, data dictionary, and complete proofs of losslessness & dependency preservation.</p>
+                        </div>
+                    </a>
+
+                    <a href="https://github.com/KANISHKA-0312/electricity-consumption-management/blob/main/docs/Testing_Report.md" target="_blank" class="p-4 rounded-xl border border-slate-200 hover:border-blue-500 hover:shadow-md transition flex items-start gap-4">
+                        <span class="p-3 bg-amber-100 text-amber-700 rounded-lg text-lg"><i class="fas fa-vial"></i></span>
+                        <div>
+                            <h4 class="font-bold text-sm text-slate-900">Testing Report & Verification Matrix</h4>
+                            <p class="text-xs text-slate-500 mt-1">16 Test cases covering Boundary Value Analysis, Equivalence Partitioning, and White-box testing.</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-6 border-t border-slate-800 text-xs text-center">
+        <p>Department of Information Technology &bull; Velalar College of Engineering and Technology, Erode - 638012</p>
+        <p class="mt-1">Scenario 14: Electricity Consumption Management and Energy Usage Analysis System</p>
+    </footer>
+
+    <!-- Application Script -->
+    <script>
+        // Sample Consumer Data
+        const consumers = [
+            { id: "CONS-1001", name: "Ramesh Kumar S", type: "Domestic", meter: "MTR-ERD-1001", load: 3.0, city: "Erode", prev: 2415, curr: 2600, status: "Paid" },
+            { id: "CONS-1002", name: "Priya Dharshini M", type: "Domestic", meter: "MTR-ERD-1002", load: 4.0, city: "Erode", prev: 3895, curr: 4180, status: "Unpaid" },
+            { id: "CONS-1003", name: "Senthil Nathan K", type: "Domestic", meter: "MTR-ERD-1003", load: 2.0, city: "Erode", prev: 1510, curr: 1610, status: "Paid" },
+            { id: "CONS-1004", name: "Kavitha Ramachandran", type: "Domestic", meter: "MTR-ERD-1004", load: 5.0, city: "Erode", prev: 5810, curr: 6210, status: "Unpaid" },
+            { id: "CONS-1005", name: "Arun Prasath V", type: "Domestic", meter: "MTR-ERD-1005", load: 3.5, city: "Erode", prev: 3105, curr: 3315, status: "Paid" },
+            { id: "CONS-1006", name: "Meenakshi Sundaram", type: "Domestic", meter: "MTR-ERD-1006", load: 6.0, city: "Erode", prev: 7250, curr: 7700, status: "Unpaid" },
+            { id: "CONS-1007", name: "Vigneshwaran P", type: "Domestic", meter: "MTR-ERD-1007", load: 2.5, city: "Erode", prev: 1075, curr: 1145, status: "Paid" },
+            { id: "CONS-1008", name: "Deepa Jayakumar", type: "Domestic", meter: "MTR-ERD-1008", load: 4.0, city: "Erode", prev: 3570, curr: 3820, status: "Unpaid" },
+            { id: "CONS-2001", name: "Kongu Supermarket & Bakery", type: "Commercial", meter: "MTR-ERD-2001", load: 15.0, city: "Erode", prev: 22900, curr: 24400, status: "Paid" },
+            { id: "CONS-2002", name: "TexValley Retail Showroom", type: "Commercial", meter: "MTR-ERD-2002", load: 45.0, city: "Erode", prev: 80000, curr: 85100, status: "Unpaid" },
+            { id: "CONS-2003", name: "Aavin Milk Parlour & Cafe", type: "Commercial", meter: "MTR-ERD-2003", load: 10.0, city: "Erode", prev: 14810, curr: 15690, status: "Paid" },
+            { id: "CONS-2004", name: "Lotus Diagnostic Center", type: "Commercial", meter: "MTR-ERD-2004", load: 25.0, city: "Erode", prev: 43650, curr: 46500, status: "Paid" },
+            { id: "CONS-2005", name: "Hotel Saravana Bhavan", type: "Commercial", meter: "MTR-ERD-2005", load: 30.0, city: "Erode", prev: 48850, curr: 52050, status: "Unpaid" },
+            { id: "CONS-3001", name: "Bhavani Spinning Mills", type: "Industrial", meter: "MTR-ERD-3001", load: 120.0, city: "Perundurai", prev: 226700, curr: 243100, status: "Paid" },
+            { id: "CONS-3002", name: "Sakthi Dyeing Unit", type: "Industrial", meter: "MTR-ERD-3002", load: 150.0, city: "Erode", prev: 304400, curr: 325100, status: "Unpaid" },
+            { id: "CONS-3003", name: "Erode Turmeric Agro Ltd", type: "Industrial", meter: "MTR-ERD-3003", load: 85.0, city: "Erode", prev: 122700, curr: 131200, status: "Paid" },
+            { id: "CONS-3004", name: "Premier Steel Fabricators", type: "Industrial", meter: "MTR-ERD-3004", load: 95.0, city: "Erode", prev: 145600, curr: 156000, status: "Unpaid" },
+            { id: "CONS-4001", name: "Murugesan Farm Borewell 1", type: "Agricultural", meter: "MTR-ERD-4001", load: 7.5, city: "Bhavani", prev: 15720, curr: 16220, status: "Paid" },
+            { id: "CONS-4002", name: "Chinnasamy Canal Pump", type: "Agricultural", meter: "MTR-ERD-4002", load: 10.0, city: "Kodumudi", prev: 23190, curr: 23900, status: "Paid" },
+            { id: "CONS-4003", name: "Ramasamy Coconut Plantation", type: "Agricultural", meter: "MTR-ERD-4003", load: 5.0, city: "Modakkurichi", prev: 10360, curr: 10700, status: "Paid" }
+        ];
+
+        // Tariff Calculator Logic (Matches Java implementation 1:1)
+        function computeTariff(type, units) {
+            let energy = 0, fixed = 0, duty = 0, subsidy = 0;
+            if (type === "Domestic") {
+                if (units <= 100) { energy = 0; fixed = 0; }
+                else if (units <= 200) { energy = (units - 100) * 2.25; fixed = 20; }
+                else if (units <= 400) { energy = 225 + (units - 200) * 4.50; fixed = 30; }
+                else if (units <= 500) { energy = 225 + 900 + (units - 400) * 6.00; fixed = 50; }
+                else { energy = 225 + 900 + 600 + (units - 500) * 8.00; fixed = 80; }
+                duty = (energy + fixed) * 0.05;
+            } else if (type === "Commercial") {
+                if (units <= 100) { energy = units * 6.50; fixed = 100; }
+                else { energy = 650 + (units - 100) * 9.50; fixed = 150; }
+                duty = (energy + fixed) * 0.05;
+            } else if (type === "Industrial") {
+                if (units <= 500) { energy = units * 8.00; fixed = 300; }
+                else { energy = 4000 + (units - 500) * 11.50; fixed = 500; }
+                duty = (energy + fixed) * 0.05;
+            } else if (type === "Agricultural") {
+                energy = units * 0.50;
+                fixed = 0;
+                subsidy = energy;
+                duty = 0;
+            }
+            let total = Math.max(0, (energy + fixed + duty) - subsidy);
+            return { energy, fixed, duty, subsidy, total };
+        }
+
+        function calculateLiveBill(e) {
+            if (e) e.preventDefault();
+            const type = document.getElementById("calcCategory").value;
+            const prev = parseFloat(document.getElementById("calcPrevReading").value) || 0;
+            const curr = parseFloat(document.getElementById("calcCurrReading").value) || 0;
+
+            if (curr < prev) {
+                alert("Invalid readings! Current reading cannot be less than previous reading.");
+                return;
+            }
+
+            const units = curr - prev;
+            document.getElementById("calcPreviewUnits").textContent = `${units.toFixed(1)} kWh`;
+
+            const res = computeTariff(type, units);
+
+            document.getElementById("invPrevVal").textContent = prev.toLocaleString();
+            document.getElementById("invCurrVal").textContent = curr.toLocaleString();
+            document.getElementById("invUnitsVal").textContent = `${units.toFixed(1)} kWh`;
+            document.getElementById("invEnergyCharges").textContent = `₹ ${res.energy.toFixed(2)}`;
+            document.getElementById("invFixedCharges").textContent = `₹ ${res.fixed.toFixed(2)}`;
+            document.getElementById("invDuty").textContent = `₹ ${res.duty.toFixed(2)}`;
+            document.getElementById("invTotalAmount").textContent = `₹ ${res.total.toFixed(2)}`;
+
+            const subRow = document.getElementById("invSubsidyRow");
+            if (res.subsidy > 0) {
+                subRow.classList.remove("hidden");
+                document.getElementById("invSubsidy").textContent = `-₹ ${res.subsidy.toFixed(2)}`;
+            } else {
+                subRow.classList.add("hidden");
+            }
+        }
+
+        function autofillConsumer() {
+            const id = document.getElementById("calcConsumerSelect").value;
+            const c = consumers.find(item => item.id === id);
+            if (!c) return;
+            document.getElementById("calcCategory").value = c.type;
+            document.getElementById("calcLoad").value = c.load;
+            document.getElementById("calcPrevReading").value = c.prev;
+            document.getElementById("calcCurrReading").value = c.curr;
+            document.getElementById("invId").textContent = `BILL-202611-${c.id.replace("CONS-", "")}`;
+            document.getElementById("invConsumerMeta").textContent = `Consumer: ${c.name} | Meter: ${c.meter}`;
+            
+            const badge = document.getElementById("invStatusBadge");
+            badge.textContent = c.status.toUpperCase();
+            badge.className = c.status === "Paid" 
+                ? "bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide"
+                : "bg-rose-100 text-rose-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide";
+
+            calculateLiveBill();
+        }
+
+        function populateConsumers() {
+            const select = document.getElementById("calcConsumerSelect");
+            const tbody = document.getElementById("consumerTableBody");
+            tbody.innerHTML = "";
+
+            consumers.forEach(c => {
+                // Dropdown
+                const opt = document.createElement("option");
+                opt.value = c.id;
+                opt.textContent = `${c.id} - ${c.name} (${c.type})`;
+                select.appendChild(opt);
+
+                // Table row
+                const tr = document.createElement("tr");
+                tr.className = "hover:bg-slate-50 transition";
+                tr.innerHTML = `
+                    <td class="p-3.5 font-bold text-blue-600">${c.id}</td>
+                    <td class="p-3.5 font-semibold text-slate-800">${c.name}</td>
+                    <td class="p-3.5"><span class="px-2 py-0.5 rounded text-[11px] font-bold ${
+                        c.type === 'Domestic' ? 'bg-blue-100 text-blue-800' :
+                        c.type === 'Commercial' ? 'bg-amber-100 text-amber-800' :
+                        c.type === 'Industrial' ? 'bg-purple-100 text-purple-800' : 'bg-emerald-100 text-emerald-800'
+                    }">${c.type}</span></td>
+                    <td class="p-3.5 text-slate-500 font-mono">${c.meter}</td>
+                    <td class="p-3.5 text-slate-700 font-semibold">${c.load.toFixed(1)} kW</td>
+                    <td class="p-3.5 text-slate-500">${c.city}</td>
+                    <td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${c.status === 'Paid' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}">${c.status}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterConsumerTable() {
+            const query = document.getElementById("consumerSearchInput").value.toLowerCase();
+            const cat = document.getElementById("categoryFilterSelect").value;
+            const rows = document.querySelectorAll("#consumerTableBody tr");
+
+            rows.forEach(r => {
+                const text = r.textContent.toLowerCase();
+                const matchesQuery = text.includes(query);
+                const matchesCat = cat === "ALL" || text.includes(cat.toLowerCase());
+                r.style.display = (matchesQuery && matchesCat) ? "" : "none";
+            });
+        }
+
+        function updateThreshold(val) {
+            document.getElementById("thresholdDisplay").innerHTML = `&ge; ${val} kWh`;
+            populateHighUsage(parseFloat(val));
+        }
+
+        function populateHighUsage(threshold = 400) {
+            const tbody = document.getElementById("highUsageTableBody");
+            tbody.innerHTML = "";
+
+            const filtered = consumers
+                .map(c => {
+                    const units = c.curr - c.prev;
+                    const b = computeTariff(c.type, units);
+                    return { ...c, units, bill: b.total };
+                })
+                .filter(c => c.units >= threshold)
+                .sort((a, b) => b.units - a.units);
+
+            filtered.forEach((c, index) => {
+                const tr = document.createElement("tr");
+                tr.className = "hover:bg-slate-50 transition";
+                tr.innerHTML = `
+                    <td class="p-3.5 font-bold text-slate-400">#${index + 1}</td>
+                    <td class="p-3.5 font-bold text-blue-600">${c.id}</td>
+                    <td class="p-3.5 font-semibold text-slate-900">${c.name}</td>
+                    <td class="p-3.5"><span class="px-2 py-0.5 rounded text-[11px] font-bold ${
+                        c.type === 'Industrial' ? 'bg-purple-100 text-purple-800' : 'bg-amber-100 text-amber-800'
+                    }">${c.type}</span></td>
+                    <td class="p-3.5 font-bold text-slate-800">${c.units.toLocaleString()} kWh</td>
+                    <td class="p-3.5 font-bold text-blue-700">₹ ${c.bill.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                    <td class="p-3.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${c.status === 'Paid' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}">${c.status}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function switchTab(name) {
+            document.querySelectorAll(".tab-content").forEach(el => el.classList.add("hidden"));
+            document.querySelectorAll(".tab-btn").forEach(el => {
+                el.classList.remove("border-blue-600", "text-blue-600");
+                el.classList.add("border-transparent", "text-slate-500");
+            });
+
+            document.getElementById(`view-${name}`).classList.remove("hidden");
+            const btn = document.getElementById(`tab-${name}`);
+            btn.classList.add("border-blue-600", "text-blue-600");
+            btn.classList.remove("border-transparent", "text-slate-500");
+        }
+
+        // Initialize Charts
+        function initCharts() {
+            // Trend Line Chart
+            new Chart(document.getElementById('chartMonthlyTrend'), {
+                type: 'line',
+                data: {
+                    labels: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+                    datasets: [
+                        { label: 'Industrial', data: [63300, 60800, 59100, 57600, 56600, 56000], borderColor: '#8e44ad', tension: 0.3 },
+                        { label: 'Commercial', data: [16470, 15600, 14730, 14250, 13860, 13530], borderColor: '#e67e22', tension: 0.3 },
+                        { label: 'Domestic', data: [2850, 2605, 2335, 2190, 2075, 1950], borderColor: '#2980b9', tension: 0.3 },
+                        { label: 'Agricultural', data: [2150, 2290, 1920, 1760, 1650, 1550], borderColor: '#27ae60', tension: 0.3 }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            // Revenue Pie Chart
+            new Chart(document.getElementById('chartRevenuePie'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Industrial', 'Commercial', 'Domestic', 'Agricultural (Subsidized)'],
+                    datasets: [{
+                        data: [82.1, 17.1, 0.8, 0.0],
+                        backgroundColor: ['#8e44ad', '#e67e22', '#2980b9', '#27ae60']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            // Category Average Bar Chart
+            new Chart(document.getElementById('chartCategoryAvg'), {
+                type: 'bar',
+                data: {
+                    labels: ['Domestic', 'Agricultural', 'Commercial', 'Industrial'],
+                    datasets: [{
+                        label: 'Average Monthly Units (kWh)',
+                        data: [304.2, 659.2, 3016.5, 14950.0],
+                        backgroundColor: ['#2980b9', '#27ae60', '#e67e22', '#8e44ad']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        // On Load
+        window.addEventListener('DOMContentLoaded', () => {
+            populateConsumers();
+            populateHighUsage();
+            initCharts();
+            // Default calculation
+            calculateLiveBill();
+        });
+    </script>
+</body>
+</html>
