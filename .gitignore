@@ -1,0 +1,16 @@
+# Compiled Java class files
+*.class
+java-app/bin/
+
+# Python cache & virtual environment
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+
+# Operating System Files
+.DS_Store
+Thumbs.db
